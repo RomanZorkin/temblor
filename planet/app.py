@@ -9,7 +9,7 @@ class Planet:
         self.lon = lon
         self.lat = lat
         self.date = date
-        self.planets = [ephem.Mercury, ephem.Venus, ephem.Mars, ephem.Jupiter, ephem.Saturn, ephem.Moon]
+        self.planets = [ephem.Mercury, ephem.Venus, ephem.Mars, ephem.Jupiter, ephem.Saturn, ephem.Moon, ephem.Sun]
         self.parametrs = dict()
 
     def planet_parametr(self, ephem_planet: ephem) -> None:
