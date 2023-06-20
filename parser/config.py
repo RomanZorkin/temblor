@@ -1,0 +1,1 @@
+endpoint = 'https://earthquake.usgs.gov/fdsnws/event/1/query'
