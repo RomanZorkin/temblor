@@ -4,7 +4,6 @@ from geopy.geocoders import Nominatim
 
 class Planet:
 
-
     def __init__(self, lon: str, lat: str, date: str) -> None:
         self.lon = lon
         self.lat = lat
