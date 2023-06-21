@@ -1,15 +1,26 @@
+from datetime import datetime
+
 import ephem
 from geopy.geocoders import Nominatim
 
 
 class Planet:
 
-    def __init__(self, lon: str, lat: str, date: str) -> None:
+    def __init__(self, lon: str, lat: str, date: datetime) -> None:
         self.lon = lon
         self.lat = lat
-        self.date = date
-        self.planets = [ephem.Mercury, ephem.Venus, ephem.Mars, ephem.Jupiter, ephem.Saturn, ephem.Moon, ephem.Sun]
-        self.parametrs = dict()
+        self.date = date.strftime('%Y/%m/%d')
+        self.planets = [
+            ephem.Mercury,
+            ephem.Venus,
+            ephem.Mars,
+            ephem.Jupiter,
+            ephem.Saturn,
+            ephem.Moon,
+            ephem.Sun,
+        ]
+        self.parameters = dict()
+        self.dist_coef = ephem.meters_per_au / (1000 * 1000000)
 
     def planet_parametr(self, ephem_planet: ephem) -> None:
 
@@ -19,19 +30,20 @@ class Planet:
         gatech.date = self.date
 
         planet = ephem_planet(gatech)
-        self.parametrs[f'{planet.name}_earth_distance'] = planet.earth_distance * ephem.meters_per_au / (1000 *1000000)
-        self.parametrs[f'{planet.name}_sun_distance'] = planet.sun_distance * ephem.meters_per_au / (1000 *1000000)
-        self.parametrs[f'{planet.name}_hlat'] = planet.hlat
-        self.parametrs[f'{planet.name}_hlon'] = planet.hlon
-        self.parametrs[f'{planet.name}_size'] = planet.size
-        self.parametrs[f'{planet.name}_radius'] = planet.radius
-        self.parametrs[f'{planet.name}_a_ra'] = planet.a_ra
-        self.parametrs[f'{planet.name}_elong'] = planet.elong
+
+        self.parameters[f'{planet.name}_earth_distance'] = planet.earth_distance * self.dist_coef
+        self.parameters[f'{planet.name}_sun_distance'] = planet.sun_distance * self.dist_coef
+        self.parameters[f'{planet.name}_hlat'] = planet.hlat
+        self.parameters[f'{planet.name}_hlon'] = planet.hlon
+        self.parameters[f'{planet.name}_size'] = planet.size
+        self.parameters[f'{planet.name}_radius'] = planet.radius
+        self.parameters[f'{planet.name}_a_ra'] = planet.a_ra
+        self.parameters[f'{planet.name}_elong'] = planet.elong
 
     def get_parametrs(self):
         for planet in self.planets:
             self.planet_parametr(planet)
-        return self.parametrs
+        return self.parameters
 
 
 class Geo:
