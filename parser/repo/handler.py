@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Tuple
 
 import httpx
+import pandas as pd
 
 from parser.config import RequestConfig
 from parser.schemas import QuakeRequest, QuakeRequestList
@@ -14,14 +15,28 @@ class QuakeExtractor:
         self.start = start_date
         self.end = end_date
         self.period_list: List[Tuple[datetime, datetime]] = []
-        self.quake_list = []
+        self.quake_list: List[QuakeRequest] = []
         self._period_slices()
 
-    def remote_extract(self):
+    def remote_extract(self) -> None:
         for period in self.period_list:
             config = self._get_param(period)
             api_data = self._read_api(config)
             self.quake_list.extend(api_data.rows)
+
+    def to_dicts(self):
+        new_list = []
+        for row in self.quake_list:
+            new_list.append({
+                'magnitude': row.magnitude,
+                'longitude': row.longitude,
+                'latitude': row.latitude,
+                'date': row.date,
+            })
+        return new_list
+
+    def to_frame(self):
+        return pd.DataFrame(data=self.to_dicts())
 
     def _get_param(self, period: Tuple[datetime, datetime]) -> RequestConfig:
         start_date, end_date = period
