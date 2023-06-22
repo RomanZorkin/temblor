@@ -17,10 +17,13 @@
         "**/__pycache__": true
     },    
     "cSpell.words": [
+        "endtime",
         "ephem",
         "geocoders",
         "geopy",
+        "httpx",
         "Nominatim",
-        "pydantic"
+        "pydantic",
+        "starttime"
     ]
 }

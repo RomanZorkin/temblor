@@ -8,7 +8,7 @@ from parser.schemas import QuakeRequest, QuakeRequestList
 
 
 class QuakeExtractor:
-    """Класс отвечает за парсинг данных и передачу их далее в базу даных или csv файл."""
+    """Класс отвечает за парсинг данных и передачу их далее в базу данных или csv файл."""
 
     def __init__(self, start_date: datetime, end_date: datetime) -> None:
         self.start = start_date
@@ -21,7 +21,7 @@ class QuakeExtractor:
         for period in self.period_list:
             config = self._get_param(period)
             api_data = self._read_api(config)
-            self.quake_list.extend(api_data.rows)            
+            self.quake_list.extend(api_data.rows)
 
     def _get_param(self, period: Tuple[datetime, datetime]) -> RequestConfig:
         start_date, end_date = period
