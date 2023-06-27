@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from planet.app import Planet
-from parser.repo.handler import QuakeExtractor
+from parser.extractor.handler import QuakeExtractor
 
 
 class QuakeParser:
