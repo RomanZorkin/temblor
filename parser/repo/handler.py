@@ -20,6 +20,7 @@ class QuakeExtractor:
 
     def remote_extract(self) -> None:
         for period in self.period_list:
+            print(f'strat {period} period')
             config = self._get_param(period)
             api_data = self._read_api(config)
             self.quake_list.extend(api_data.rows)
@@ -41,6 +42,7 @@ class QuakeExtractor:
     def _get_param(self, period: Tuple[datetime, datetime]) -> RequestConfig:
         start_date, end_date = period
         config = RequestConfig()
+        print(start_date)
         config.params.starttime = start_date.strftime('%Y-%m-%d')
         config.params.endtime = end_date.strftime('%Y-%m-%d')
         return config

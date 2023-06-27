@@ -17,3 +17,14 @@ class RequestConfig(BaseModel):
     endpoint = 'https://earthquake.usgs.gov/fdsnws/event/1/query'
     params: RequestParam = RequestParam()
     timeout: float = 10.0
+
+
+areas = {
+    'russia': {
+        'minlatitude': '41.162',
+        'maxlatitude': '81.957',
+        'minlongitude': '19.688',
+        'maxlongitude': '190.547',
+        'minmagnitude': '2.5',
+    },
+}

@@ -1,25 +1,44 @@
 from datetime import datetime
+from pathlib import Path
 
-import httpx
+import pandas as pd
 
-from parser import config
-from parser.schemas import QuakeRequest, QuakeRequestList
-
-
-config_app = config.RequestConfig()
+from planet.app import Planet
+from parser.repo.handler import QuakeExtractor
 
 
-def get_rows():
-    request = httpx.get(config_app.endpoint, params=config_app.params.dict(), timeout=config_app.timeout)
-    data = request.json()
-    export_list = []
-    for row in data['features']:
-        export_list.append(
-            QuakeRequest(
-                magnitude=row['properties']['mag'],
-                longitude=row['geometry']['coordinates'][0],
-                latitude=row['geometry']['coordinates'][1],
-                date=datetime.fromtimestamp(int(row['properties']['time'] / 1000))
-            )
-        )
-    return QuakeRequestList(rows=export_list)
+class QuakeParser:
+
+    def __init__(self, start: datetime, end: datetime) -> None:
+        self.start = start
+        self.end = end
+        self.quakes = QuakeExtractor(self.start, self.end)
+        self.quake_df = pd.DataFrame()
+        self.make_frame()
+
+    def planet_param(self, row) -> None:
+        print(row['Дата'])
+        planet = Planet(row['Долгота'], row['Широта'], row['Дата'])
+        return pd.concat([row, pd.Series(planet.get_parameters())])
+
+    def make_frame(self) -> None:
+        self.quakes.period_list
+        self.quakes.remote_extract()
+        self.quake_df = self.quakes.to_frame()
+        self.quake_df.columns = ['Магнитуда', 'Долгота', 'Широта', 'Дата']
+        self.quake_df = self.quake_df.apply(self.planet_param, axis=1)
+
+
+class CsvParser(QuakeParser):
+
+    def __init__(self, start: datetime, end: datetime, filename: str) -> None:
+        super().__init__(start, end)
+        self.filename = filename
+        self.data_path = Path('data')
+
+    def to_csv(self) -> bool:
+        
+        csv_file = self.data_path / f'{self.filename}.csv'
+        print(csv_file)
+        self.quake_df.to_csv(csv_file)
+        return True

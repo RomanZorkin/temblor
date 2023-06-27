@@ -22,7 +22,7 @@ class Planet:
         self.parameters = dict()
         self.dist_coef = ephem.meters_per_au / (1000 * 1000000)
 
-    def planet_parametr(self, ephem_planet: ephem) -> None:
+    def planet_parameter(self, ephem_planet: ephem) -> None:
 
         gatech = ephem.Observer()
         gatech.lon = self.lon
@@ -40,9 +40,9 @@ class Planet:
         self.parameters[f'{planet.name}_a_ra'] = planet.a_ra
         self.parameters[f'{planet.name}_elong'] = planet.elong
 
-    def get_parametrs(self):
+    def get_parameters(self):
         for planet in self.planets:
-            self.planet_parametr(planet)
+            self.planet_parameter(planet)
         return self.parameters
 
 
