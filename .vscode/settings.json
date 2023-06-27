@@ -22,6 +22,11 @@
         "geocoders",
         "geopy",
         "httpx",
+        "maxlatitude",
+        "maxlongitude",
+        "minlatitude",
+        "minlongitude",
+        "minmagnitude",
         "Nominatim",
         "pydantic",
         "starttime"

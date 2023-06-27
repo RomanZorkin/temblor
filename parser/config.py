@@ -19,12 +19,17 @@ class RequestConfig(BaseModel):
     timeout: float = 10.0
 
 
-areas = {
+AREAS = {
     'russia': {
         'minlatitude': '41.162',
         'maxlatitude': '81.957',
         'minlongitude': '19.688',
         'maxlongitude': '190.547',
-        'minmagnitude': '2.5',
+    },
+    'world': {
+        'minlatitude': '0.0',
+        'maxlatitude': '81.957',
+        'minlongitude': '0.0',
+        'maxlongitude': '190.547',
     },
 }

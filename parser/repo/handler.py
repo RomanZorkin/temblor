@@ -4,7 +4,7 @@ from typing import List, Tuple
 import httpx
 import pandas as pd
 
-from parser.config import RequestConfig
+from parser.config import AREAS, RequestConfig, RequestParam
 from parser.schemas import QuakeRequest, QuakeRequestList
 
 
@@ -18,10 +18,10 @@ class QuakeExtractor:
         self.quake_list: List[QuakeRequest] = []
         self._period_slices()
 
-    def remote_extract(self) -> None:
+    def remote_extract(self, area: str = 'russia') -> None:
         for period in self.period_list:
-            print(f'strat {period} period')
-            config = self._get_param(period)
+            print(f'start {period} period, with area {area}')
+            config = self._get_param(period, area)
             api_data = self._read_api(config)
             self.quake_list.extend(api_data.rows)
 
@@ -39,10 +39,11 @@ class QuakeExtractor:
     def to_frame(self):
         return pd.DataFrame(data=self.to_dicts())
 
-    def _get_param(self, period: Tuple[datetime, datetime]) -> RequestConfig:
+    def _get_param(self, period: Tuple[datetime, datetime], area: str) -> RequestConfig:
         start_date, end_date = period
         config = RequestConfig()
-        print(start_date)
+        config.params = RequestParam(**AREAS[area])
+        print(start_date, config, AREAS[area])
         config.params.starttime = start_date.strftime('%Y-%m-%d')
         config.params.endtime = end_date.strftime('%Y-%m-%d')
         return config
