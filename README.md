@@ -72,3 +72,91 @@ magnitude_frame = predict_magnitude(place, date, period)
 ___
 ## 5. Параметры планет
 В качестве праметров для обучения модели используются сведения о планетах, полученные с помощью библиотеки pyephem https://rhodesmill.org/pyephem/ на каждую дату.
+
+
+## __ Запуск базы данных
+
+Для старта проекта у вас должен быть установлен docker и docker-compose. И в корне проекта записан конфигурационный файл docker-compose.yml.
+
+Источник - https://dev.to/titronium/clickhouse-server-in-1-minute-with-docker-4gf2
+
+Запустите docker-compose, для старта контейнеров
+```bash
+docker-compose up -d
+```
+Дождитесь окончания скачивания и установки необходимых образов
+
+### Конфигурация пользователя по умолчанию (суперпользователя)
+
+Когда контейнер будет запущен, необходимо будет войти в его командную строку
+
+```bash
+docker-compose exec ch_server bash
+```
+Далее необходимо будет настроить пользователей, имеющих право доступа к базе данных. Установим текстовый редактор nano
+```bash
+apt-get update
+apt-get install nano
+```
+Далее внесем изменения в конфигурационный файл, для предоставлению суперпользователю добавлять новых пользователей.
+```bash
+nano /etc/clickhouse-server/users.xml
+```
+Необходимо раскоментировать строки в настройках доступа суперполльзователя
+```xml
+..
+<!-- User can create other users and grant rights to them. -->
+<!-- <access_management>1</access_management> -->
+..
+```
+В этом же файле можете установить пароль для этого пользователя
+
+Источник - https://stackoverflow.com/questions/64166492/how-to-setup-an-admin-account-for-clickhouse
+
+Для выхода из консоли контейнера введите
+```bash
+exit
+```
+И потребуется перезагрузка сервиса
+```bash
+docker-compose stop
+docker-compose up -d
+```
+### Добавление новых пользователей
+Запускаем клиента ClickHouse
+```bash
+docker-compose exec ch_server clickhouse-client
+```
+У вас появиться результат запуска клиента
+```bash
+ClickHouse client version 21.2.5.5 (official build).
+Connecting to localhost:9000 as user default.
+Connected to ClickHouse server version 21.2.5 revision 54447.
+
+5175e561dffd :)
+```
+Это SQL консоль здесь стандартными командами добавляем пользователя
+```bash
+CREATE USER <имя пользователя> IDENTIFIED WITH sha256_password BY '<пароль пользователя>';
+```
+В дальнейшем, чтобы изменить набор привилегий и ролей пользователя, используйте запросы GRANT и REVOKE. Например, выдайте пользователю права на чтение всех объектов в определенной базе данных
+```bash
+GRANT SELECT ON <имя базы данных>.* TO <имя пользователя>;
+```
+Источник https://cloud.yandex.ru/docs/managed-clickhouse/operations/cluster-users
+
+
+## Создание первой базы данных и таблицы
+Источник https://clickhouse.com/docs/en/quick-start
+
+Воспользуемся предыдущей командой для запуска консоли SQL
+```bash
+sudo docker-compose exec ch_server clickhouse-client
+```
+И далее вводим необходимые нам команды
+```sql
+SHOW databases
+
+CREATE DATABASE IF NOT EXISTS quake
+```
+
