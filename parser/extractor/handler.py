@@ -52,6 +52,8 @@ class QuakeExtractor:
         request = httpx.get(
             remote_conf.endpoint, params=remote_conf.params.dict(), timeout=remote_conf.timeout,
         )
+        
+        #print(request.text)
         data = request.json()
         export_list = []
 

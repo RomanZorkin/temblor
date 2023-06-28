@@ -5,6 +5,7 @@ import pandas as pd
 
 from planet.app import Planet
 from parser.extractor.handler import QuakeExtractor
+from parser.repo import handler
 
 
 class QuakeParser:
@@ -40,3 +41,19 @@ class CsvParser(QuakeParser):
         csv_file = self.data_path / f'{self.filename}.csv'
         self.quake_df.to_csv(csv_file)
         return True
+
+
+class ClickHouseParser(QuakeParser):
+
+    def __init__(self, start: datetime, end: datetime, area: str) -> None:
+        super().__init__(start, end, area)
+
+    def upload_quakes(self) -> None:
+        tmp_df = self.quake_df.copy()
+        tmp_columns = tmp_df.columns.to_list()
+        tmp_columns[0] = 'Magnitude'
+        tmp_columns[1] = 'Longitude'
+        tmp_columns[2] = 'Latitude'
+        tmp_columns[3] = 'Date'
+        tmp_df.columns = tmp_columns
+        handler.upload_df(tmp_df)
