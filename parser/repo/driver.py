@@ -68,3 +68,7 @@ def create_tables():
     ENGINE = MergeTree()
     PRIMARY KEY (Longitude, Latitude, Date)
     """)
+
+
+def drop_tables():
+    client.command('DROP TABLE quakes')
