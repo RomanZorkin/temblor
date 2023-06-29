@@ -29,6 +29,7 @@
         "minmagnitude",
         "Nominatim",
         "pydantic",
+        "scipy",
         "starttime"
     ]
 }
