@@ -25,6 +25,9 @@ scikit-learn = "^1.2.2"
 pydantic = "^1.10.9"
 ipykernel = "^6.23.2"
 clickhouse-connect = "^0.6.4"
+tensorflow = "^2.12.0"
+np-utils = "^0.6.0"
+keras = "^2.13.1"
 
 
 [build-system]

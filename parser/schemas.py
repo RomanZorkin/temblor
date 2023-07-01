@@ -7,8 +7,8 @@ from pydantic import BaseModel
 class QuakeRequest(BaseModel):
 
     magnitude: float  # магнитуда
-    longitude: str   # долгота
-    latitude: str  # широта
+    longitude: float   # долгота
+    latitude: float  # широта
     date: datetime
 
 

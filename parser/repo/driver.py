@@ -5,9 +5,9 @@ def create_tables():
     client.command("""CREATE TABLE quake.quakes
     (
         Magnitude Float64,
-        Longitude String,
-        Latitude String,
         Date DateTime('Europe/London'),
+        Longitude Float64,
+        Latitude Float64,
         Mercury_earth_distance Float64,
         Mercury_sun_distance Float64,
         Mercury_hlat Float64,
