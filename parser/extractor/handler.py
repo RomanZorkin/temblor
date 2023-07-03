@@ -23,6 +23,8 @@ class QuakeExtractor:
             print(f'start {period} period, with area {area}')
             config = self._get_param(period, area)
             api_data = self._read_api(config)
+            if not api_data:
+                continue
             self.quake_list.extend(api_data.rows)
 
     def to_dicts(self):
@@ -52,8 +54,10 @@ class QuakeExtractor:
         request = httpx.get(
             remote_conf.endpoint, params=remote_conf.params.dict(), timeout=remote_conf.timeout,
         )
-        
-        #print(request.text)
+        print(request.status_code)
+        if request.status_code != 200:
+            print(request.text)
+            return False
         data = request.json()
         export_list = []
 

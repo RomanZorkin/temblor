@@ -31,4 +31,4 @@ class RequestConfig(BaseModel):
 
     endpoint = 'https://earthquake.usgs.gov/fdsnws/event/1/query'
     params: RequestParam = RequestParam()
-    timeout: float = 10.0
+    timeout: float = 20.0

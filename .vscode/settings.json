@@ -22,6 +22,7 @@
         "geocoders",
         "geopy",
         "httpx",
+        "keras",
         "maxlatitude",
         "maxlongitude",
         "minlatitude",
@@ -30,6 +31,7 @@
         "Nominatim",
         "pydantic",
         "scipy",
+        "sklearn",
         "starttime"
     ]
 }
